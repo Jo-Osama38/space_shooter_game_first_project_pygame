@@ -23,7 +23,7 @@ def draw_lives(lives):
     WIND.blit(lives_lables,(10,10))
 
 def draw_levels(level):
-    levels_lables= main_font.render(f"Lives {level}",1,(255,255,255))
+    levels_lables= main_font.render(f"Level {level}",1,(255,255,255))
     WIND.blit(levels_lables,(WIDTH - levels_lables.get_width()-10,10))
 
 def draw_lost():
@@ -42,6 +42,52 @@ blue_enemy_laser = pygame.image.load(os.path.join("assets","pixel_laser_blue.png
 player_ship = pygame.image.load(os.path.join("assets","pixel_ship_yellow.png"))
 player_laser = pygame.image.load(os.path.join("assets","pixel_laser_yellow.png"))
 
+
+class Ship:
+    fbs_shots = 30 
+    def __init__(self,x,y,health = 100):
+        self.x = x
+        self.y = y
+        self.health = health
+        self.ship_img = None
+        self.laser_img = None
+        self.lasers = []
+        self.fbs_counter = 0
+
+    def move_laser(self,vel,obj):
+        self.fbs_counter -= 1
+        for laser in self.lasers:
+            laser.move(vel)
+            if laser.off_screen(HIGHIT):
+                self.lasers.remove(laser)
+            if laser.collision (obj):
+                obj.health -= 10 
+                self.lasers.remove(laser)
+
+    def shoot(self):
+        if self.fbs_counter <= 0 :
+            laser = Laser(self.x , self.y , self.laser_img)
+            self.lasers.append(laser)
+            self.fbs_counter = self.fbs_shots
+        else:
+            self.fbs_counter -= 1
+
+    def get_width(self):
+        return self.ship_img.get_width()
+
+    def get_hight(self):
+        return self.ship_img.get_hight()
+
+    # draw laser && ship
+    def draw(self, screen):
+        screen.blit(self.ship_img , (self.x, self.y))
+        for laser in self.lasers:
+            laser.draw(screen)
+        
+
+    
+        
+        
 
 def main():
     FBS = 60
