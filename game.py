@@ -14,8 +14,8 @@ main_font = pygame.font.SysFont("comicsans",35)
 lost_font = pygame.font.SysFont("comicsans",45)
 
 def collide(obj1,obj2):
-    offset_x = obj1.x - obj1.x
-    offset_y = obj1.y - obj1.y
+    offset_x = obj2.x - obj1.x
+    offset_y = obj2.y - obj1.y
     return obj1.mask.overlap(obj2.mask,(offset_x,offset_y)) != None
 
 def draw_lives(lives):
@@ -28,7 +28,7 @@ def draw_levels(level):
 
 def draw_lost():
     lost_lables= lost_font.render("You Lost!!",1,(255,255,255))
-    WIND.blit(lost_lables,(WIDTH//2 - lost_lables.get_width()//2-10,10))
+    WIND.blit(lost_lables,(WIDTH//2 - lost_lables.get_width()//2-10,HIGHIT//2))
 
 bg = pygame.transform.scale(pygame.image.load(os.path.join("assets","background-black.png")),(WIDTH,HIGHIT))
 
@@ -75,8 +75,8 @@ class Ship:
     def get_width(self):
         return self.ship_img.get_width()
 
-    def get_hight(self):
-        return self.ship_img.get_hight()
+    def get_height(self):
+        return self.ship_img.get_height()
 
     # draw +=> ship
     def draw(self, screen):
@@ -107,11 +107,11 @@ class Player(Ship):
     def __init__(self,x,y,health = 100):
         super().__init__(x ,y ,health)
         self.ship_img = player_ship
-        self.ship_laser = player_laser
+        self.laser_img = player_laser
         self.mask =pygame.mask.from_surface(self.ship_img)
         self.max_health = health
 
-    def move_lasers(self, vel, objs):
+    def move_laser(self, vel, objs):
         self.fbs_counter -=1
         for laser in self.lasers:
             laser.move(vel)
@@ -226,7 +226,7 @@ def main():
 
         for enemy in enemies[:]:
             enemy.move(enemy_vel)
-            enemy.move_lasers(laser_vel ,player)
+            enemy.move_laser(laser_vel ,player)
 
             if random.randrange(0,2*60) == 1 :
                 enemy.shoot()
@@ -235,7 +235,7 @@ def main():
                 player.health -= 10
                 enemies.remove(enemy)
 
-            elif enemy.y + enemy.get_hight() > HIGHIT:
+            elif enemy.y + enemy.get_height() > HIGHIT:
                 lives -= 1 
                 enemies.remove(enemy)
         player.move_laser(-laser_vel , enemies)
