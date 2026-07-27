@@ -133,7 +133,7 @@ class Player(Ship):
         
 
 
-class enemy(Ship):
+class Enemy(Ship):
     color_ships= {
         "red":(red_enemy,red_enemy_laser),
         "green":(green_enemy,green_enemy_laser),
@@ -157,16 +157,21 @@ class enemy(Ship):
             self.fbs_counter -= 1
 
 
-        
-
-    
-        
-        
-
 def main():
     FBS = 60
     level = 0
     lives = 5 
+
+    enemies = []
+    wave_lenght = 5
+    enemy_vel = 1
+    player_vel = 5
+    laser_vel = 5 
+    player = Player(250,450)
+    lost = False
+    lost_counter = 0 
+
+
 
     clock =pygame.time.Clock()
 
@@ -174,11 +179,38 @@ def main():
         WIND.blit(bg , (0,0))
         draw_levels(level)
         draw_lives(lives) 
+        for enemy in enemies :
+            enemy.draw()
+
+        player.draw(WIND)
+
+        if lost:
+            draw_lost()
+        
         pygame.display.update()
 
-    while True:
+    run = True
+
+    while run:
         clock.tick(FBS)
         redraw()
+
+        if lives <= 0 or player.health <= 0:
+            lost = True
+            lost_counter += 1
+
+        if lost :
+            if lost_counter > FBS*3:
+                run = False
+            else:
+                continue
+
+        if len(enemies) == 0 :
+            level += 1 
+            wave_lenght += 5
+            for i in range(wave_lenght):
+                enemy = Enemy(random.randrange(50 , WIDTH - 50), random.randrange(-1300 ,-100),random.choice(["red","blue","green"]))
+                enemies.append(enemy)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
