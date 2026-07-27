@@ -143,7 +143,7 @@ class Enemy(Ship):
     def __init__(self,x,y,color,health = 100):
         super().__init__(x,y,health)
         self.ship_img,self.laser_img = self.color_ships[color]
-        self.mask = pygame.mask.from_surface(self.img)
+        self.mask = pygame.mask.from_surface(self.ship_img)
 
     def move(self, vel):
         self.y += vel
@@ -180,7 +180,7 @@ def main():
         draw_levels(level)
         draw_lives(lives) 
         for enemy in enemies :
-            enemy.draw()
+            enemy.draw(WIND)
 
         player.draw(WIND)
 
@@ -211,7 +211,35 @@ def main():
             for i in range(wave_lenght):
                 enemy = Enemy(random.randrange(50 , WIDTH - 50), random.randrange(-1300 ,-100),random.choice(["red","blue","green"]))
                 enemies.append(enemy)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a] and player.x - player_vel > 0 :
+            player.x -= player_vel
+        if keys[pygame.K_d] and player.x + player_vel + player_ship.get_width()< WIDTH:
+            player.x += player_vel
+        if keys[pygame.K_w] and player.y - player_vel > 0 :
+            player.y -= player_vel
+        if keys[pygame.K_s] and player.y + player_vel+ player_ship.get_height() < HIGHIT:
+            player.y += player_vel
+        if keys[pygame.K_SPACE] :
+            player.shoot()
 
+
+        for enemy in enemies[:]:
+            enemy.move(enemy_vel)
+            enemy.move_lasers(laser_vel ,player)
+
+            if random.randrange(0,2*60) == 1 :
+                enemy.shoot()
+
+            if collide(enemy,player):
+                player.health -= 10
+                enemies.remove(enemy)
+
+            elif enemy.y + enemy.get_hight() > HIGHIT:
+                lives -= 1 
+                enemies.remove(enemy)
+        player.move_laser(-laser_vel , enemies)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
