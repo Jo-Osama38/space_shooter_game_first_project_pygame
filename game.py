@@ -131,7 +131,32 @@ class Player(Ship):
         pygame.draw.rect(screen ,(225,0,0) ,(self.x ,self.y + self.ship_img.get_height() +10,self.ship_img.get_width(),10))
         pygame.draw.rect(screen ,(0,225,0) ,(self.x ,self.y + self.ship_img.get_height() +10,self.ship_img.get_width()*(self.health/self.max_health),10))
         
-        
+
+
+class enemy(Ship):
+    color_ships= {
+        "red":(red_enemy,red_enemy_laser),
+        "green":(green_enemy,green_enemy_laser),
+        "blue":(blue_enemy,blue_enemy_laser)
+    }
+
+    def __init__(self,x,y,color,health = 100):
+        super().__init__(x,y,health)
+        self.ship_img,self.laser_img = self.color_ships[color]
+        self.mask = pygame.mask.from_surface(self.img)
+
+    def move(self, vel):
+        self.y += vel
+
+    def shoot(self):
+        if self.fbs_counter <= 0 :
+            laser = Laser(self.x -20 , self.y , self.laser_img)
+            self.lasers.append(laser)
+            self.fbs_counter = self.fbs_shots
+        else:
+            self.fbs_counter -= 1
+
+
         
 
     
