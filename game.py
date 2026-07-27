@@ -123,6 +123,13 @@ class Player(Ship):
                         objs.remove(obj)
                         if laser in self.lasers:
                             self.lasers.remove(laser)
+    def draw(self, screen):
+        super().draw(screen)
+        self.draw_healthbar(screen)
+
+    def draw_healthbar(self,screen):
+        pygame.draw.rect(screen ,(225,0,0) ,(self.x ,self.y + self.ship_img.get_height() +10,self.ship_img.get_width(),10))
+        pygame.draw.rect(screen ,(0,225,0) ,(self.x ,self.y + self.ship_img.get_height() +10,self.ship_img.get_width()*(self.health/self.max_health),10))
         
         
         
