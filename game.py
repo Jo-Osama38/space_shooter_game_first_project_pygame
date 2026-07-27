@@ -78,11 +78,53 @@ class Ship:
     def get_hight(self):
         return self.ship_img.get_hight()
 
-    # draw laser && ship
+    # draw +=> ship
     def draw(self, screen):
         screen.blit(self.ship_img , (self.x, self.y))
         for laser in self.lasers:
             laser.draw(screen)
+
+class Laser:
+    def __init__(self,x,y,img):
+        self.x = x
+        self.y = y
+        self.img = img
+        self.mask = pygame.mask.from_surface(self.img)
+
+    def move(self,vel):
+        self.y += vel
+    def off_screen(self,height):
+        return self.y > height or self.y < 0
+    def collision(self,obj):
+        return collide(self,obj)
+
+
+    def draw(self,screen):
+        screen.blit(self.img ,(self.x ,self.y))
+
+    
+class Player(Ship):
+    def __init__(self,x,y,health = 100):
+        super().__init__(x ,y ,health)
+        self.ship_img = player_ship
+        self.ship_laser = player_laser
+        self.mask =pygame.mask.from_surface(self.ship_img)
+        self.max_health = health
+
+    def move_lasers(self, vel, objs):
+        self.fbs_counter -=1
+        for laser in self.lasers:
+            laser.move(vel)
+            if laser.off_screen(HIGHIT):
+                self.lasers.remove(laser)
+            else:
+                for obj in objs:
+                    if laser.collision(obj):
+                        objs.remove(obj)
+                        if laser in self.lasers:
+                            self.lasers.remove(laser)
+        
+        
         
 
     
