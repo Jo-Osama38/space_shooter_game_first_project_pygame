@@ -12,6 +12,8 @@ WIND = pygame.display.set_mode((WIDTH,HIGHIT))
 pygame.display.set_caption("Space Shooter Game")
 main_font = pygame.font.SysFont("comicsans",35)
 lost_font = pygame.font.SysFont("comicsans",45)
+soundlaser = pygame.mixer.Sound("sounds/bullet.wav")
+soundlaser.set_volume(0.2)
 
 def collide(obj1,obj2):
     offset_x = obj2.x - obj1.x
@@ -39,8 +41,9 @@ red_enemy_laser = pygame.image.load(os.path.join("assets","pixel_laser_red.png")
 green_enemy_laser = pygame.image.load(os.path.join("assets","pixel_laser_green.png"))
 blue_enemy_laser = pygame.image.load(os.path.join("assets","pixel_laser_blue.png"))
 
-player_ship = pygame.image.load(os.path.join("assets","pixel_ship_yellow.png"))
-player_laser = pygame.image.load(os.path.join("assets","pixel_laser_yellow.png"))
+
+player_ship = [pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue3.png")]
+player_laser = [pygame.image.load("assets/blueshoot.png"),pygame.image.load("assets/blueshoot2.png"),pygame.image.load("assets/blueshoot3.png")]
 
 
 class Ship:
@@ -69,6 +72,7 @@ class Ship:
             laser = Laser(self.x , self.y , self.laser_img)
             self.lasers.append(laser)
             self.fbs_counter = self.fbs_shots
+            soundlaser.play()
         else:
             self.fbs_counter -= 1
 
@@ -90,6 +94,7 @@ class Laser:
         self.y = y
         self.img = img
         self.mask = pygame.mask.from_surface(self.img)
+        self.move =0
 
     def move(self,vel):
         self.y += vel
@@ -100,14 +105,18 @@ class Laser:
 
 
     def draw(self,screen):
-        screen.blit(self.img ,(self.x ,self.y))
+        screen.blit(player_ship[self.move],(self.x,self.y))
+        self.move += 1
+        if self.move == len (player_ship):
+                    self.move = 0
 
     
 class Player(Ship):
     def __init__(self,x,y,health = 100):
         super().__init__(x ,y ,health)
-        self.ship_img = player_ship
+        self.ship_img = player_ship[0]
         self.laser_img = player_laser
+        self.move = 0
         self.mask =pygame.mask.from_surface(self.ship_img)
         self.max_health = health
 
@@ -124,12 +133,16 @@ class Player(Ship):
                         if laser in self.lasers:
                             self.lasers.remove(laser)
     def draw(self, screen):
-        super().draw(screen)
-        self.draw_healthbar(screen)
+            screen.blit(player_laser[self.move],(self.x,self.y))
+            self.move += 1
+            if self.move == len (player_laser):
+                        self.move = 0
+
+            self.draw_healthbar(screen)
 
     def draw_healthbar(self,screen):
-        pygame.draw.rect(screen ,(225,0,0) ,(self.x ,self.y + self.ship_img.get_height() +10,self.ship_img.get_width(),10))
-        pygame.draw.rect(screen ,(0,225,0) ,(self.x ,self.y + self.ship_img.get_height() +10,self.ship_img.get_width()*(self.health/self.max_health),10))
+        pygame.draw.rect(screen ,(225,0,0) ,(0 , HIGHIT -10,WIDTH,HIGHIT-10))
+        pygame.draw.rect(screen ,(0,225,0) ,(0 , HIGHIT -10,WIDTH*(self.health/self.max_health),10))
         
 
 
@@ -148,7 +161,7 @@ class Enemy(Ship):
     def move(self, vel):
         self.y += vel
 
-    def shoot(self):
+    def shoot(self): 
         if self.fbs_counter <= 0 :
             laser = Laser(self.x -20 , self.y , self.laser_img)
             self.lasers.append(laser)
@@ -214,11 +227,11 @@ def main():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and player.x - player_vel > 0 :
             player.x -= player_vel
-        if keys[pygame.K_d] and player.x + player_vel + player_ship.get_width()< WIDTH:
+        if keys[pygame.K_d] and player.x + player_vel + player_ship[0].get_width()< WIDTH:
             player.x += player_vel
         if keys[pygame.K_w] and player.y - player_vel > 0 :
             player.y -= player_vel
-        if keys[pygame.K_s] and player.y + player_vel+ player_ship.get_height() < HIGHIT:
+        if keys[pygame.K_s] and player.y + player_vel+ player_ship[0].get_height() + 20  < HIGHIT:
             player.y += player_vel
         if keys[pygame.K_SPACE] :
             player.shoot()
