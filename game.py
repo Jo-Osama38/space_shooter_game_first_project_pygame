@@ -35,17 +35,17 @@ def draw_lost():
 bg = pygame.transform.scale(pygame.image.load(os.path.join("assets","background-black.png")),(WIDTH,HIGHIT))
 
 
-red_enemy_imgs = [pygame.image.load("assets/redship1"),pygame.image.load("assets/redship2"),pygame.image.load("assets/redship3")]
-purple_enemy_imgs = [pygame.image.load("assets/purpleship1"),pygame.image.load("assets/purpleship2"),pygame.image.load("assets/purpleship3"),pygame.image.load("assets/purpleship4")]
-green_enemy_imgs = [pygame.image.load("assets/greenship1"),pygame.image.load("assets/greenship2")]
-yellow_enemy_imgs = [pygame.image.load("assets/yellowship1"),pygame.image.load("assets/yellowship2"),pygame.image.load("assets/yellowship3")]
-red_enemy_laser_imgs = [pygame.image.load("assets/redshoot1"),pygame.image.load("assets/redshoot2"),pygame.image.load("assets/redshoot3")]
-purple_enemy_laser_imgs = [pygame.image.load("assets/purpleshoot1"),pygame.image.load("assets/purpleshoot2"),pygame.image.load("assets/purpleshoot3")]
-green_enemy_laser_imgs = [pygame.image.load("assets/greenshoot1"),pygame.image.load("assets/greenshoot2"),pygame.image.load("assets/greenshoot3")]
-yellow_enemy_laser_imgs = [pygame.image.load("assets/yellowshoot1"),pygame.image.load("assets/yellowshoot2"),pygame.image.load("assets/yellowshoot3")]
+red_enemy_imgs = [pygame.image.load("assets/redship1.png"),pygame.image.load("assets/redship2.png"),pygame.image.load("assets/redship3.png")]
+purple_enemy_imgs = [pygame.image.load("assets/purpleship1.png"),pygame.image.load("assets/purpleship2.png"),pygame.image.load("assets/purpleship3.png"),pygame.image.load("assets/purpleship4.png")]
+green_enemy_imgs = [pygame.image.load("assets/greenship1.png"),pygame.image.load("assets/greenship2.png")]
+yellow_enemy_imgs = [pygame.image.load("assets/yellowship1.png"),pygame.image.load("assets/yellowship2.png"),pygame.image.load("assets/yellowship3.png")]
+red_enemy_laser_imgs = [pygame.image.load("assets/redshoot1.png"),pygame.image.load("assets/redshoot2.png"),pygame.image.load("assets/redshoot3.png")]
+purple_enemy_laser_imgs = [pygame.image.load("assets/purpleshoot1.png"),pygame.image.load("assets/purpleshoot2.png"),pygame.image.load("assets/purpleshoot3.png")]
+green_enemy_laser_imgs = [pygame.image.load("assets/greenshoot1.png"),pygame.image.load("assets/greenshoot2.png"),pygame.image.load("assets/greenshoot3.png")]
+yellow_enemy_laser_imgs = [pygame.image.load("assets/yellowshoot1.png"),pygame.image.load("assets/yellowshoot2.png"),pygame.image.load("assets/yellowshoot3.png")]
 
 player_ship_imgs = [pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue3.png")]
-player_laser_imgs = [pygame.image.load("assets/playershoot1.png"),pygame.image.load("assets/playershoot2.png"),pygame.image.load("assets/playershoot3.png"),pygame.image.load("assets/playershoot4.png"),pygame.image.load("assets/playershoot5")]
+player_laser_imgs = [pygame.image.load("assets/playershoot1.png"),pygame.image.load("assets/playershoot2.png"),pygame.image.load("assets/playershoot3.png"),pygame.image.load("assets/playershoot4.png"),pygame.image.load("assets/playershoot5.png")]
 
 
 class Ship:
@@ -54,10 +54,12 @@ class Ship:
         self.x = x
         self.y = y
         self.health = health
-        self.ship_img = None
+        self.ship_imgs = None
         self.laser_img = None
         self.lasers = []
         self.fbs_counter = 0
+        self.index = 0
+        self.moves = 0
 
     def move_laser(self,vel,obj):
         self.fbs_counter -= 1
@@ -71,7 +73,7 @@ class Ship:
 
     def shoot(self):
         if self.fbs_counter <= 0 :
-            laser = Laser(self.x , self.y , self.laser_img)
+            laser = Laser(self.x + (self.get_width()//2) - self.laser_img[0].get_width()//2 , self.y , self.laser_img)
             self.lasers.append(laser)
             self.fbs_counter = self.fbs_shots
             soundlaser.play()
@@ -79,24 +81,26 @@ class Ship:
             self.fbs_counter -= 1
 
     def get_width(self):
-        return self.ship_img.get_width()
+        return self.ship_imgs[0].get_width()
 
     def get_height(self):
-        return self.ship_img.get_height()
+        return self.ship_imgs[0].get_height()
 
     # draw +=> ship
     def draw(self, screen):
-        screen.blit(self.ship_img , (self.x, self.y))
+        screen.blit(self.ship_imgs[int(self.index) % len(self.ship_imgs)] , (self.x, self.y))
+        self.index += 0.03
         for laser in self.lasers:
             laser.draw(screen)
 
 class Laser:
-    def __init__(self,x,y,img):
+    def __init__(self,x,y,anim_imgs):
         self.x = x
         self.y = y
-        self.img = img
+        self.img = anim_imgs[0]
         self.mask = pygame.mask.from_surface(self.img)
-        self.move =0
+        self.anim_index = 0 
+        self.anim_imgs = anim_imgs
 
     def move(self,vel):
         self.y += vel
@@ -107,20 +111,23 @@ class Laser:
 
 
     def draw(self,screen):
-        screen.blit(player_ship[self.move],(self.x,self.y))
-        self.move += 1
-        if self.move == len (player_ship):
-                    self.move = 0
+        screen.blit(self.anim_imgs[int(self.anim_index) % len(self.anim_imgs)],(self.x,self.y))
+        self.anim_index += 0.02
+        if self.anim_index == len (self.anim_imgs):
+                    self.anim_index = 0
 
     
 class Player(Ship):
     def __init__(self,x,y,health = 100):
         super().__init__(x ,y ,health)
-        self.ship_img = player_ship[0]
-        self.laser_img = player_laser
-        self.move = 0
-        self.mask =pygame.mask.from_surface(self.ship_img)
+        self.ship_img = player_ship_imgs
+        self.laser_img = player_laser_imgs
+        self.moves = 0
+        self.mask =pygame.mask.from_surface(self.ship_img[0])
         self.max_health = health
+        self.index = 0 
+        self.laserImgs = player_laser_imgs
+        self.ship_imgs = player_ship_imgs
 
     def move_laser(self, vel, objs):
         self.fbs_counter -=1
@@ -135,10 +142,12 @@ class Player(Ship):
                         if laser in self.lasers:
                             self.lasers.remove(laser)
     def draw(self, screen):
-            screen.blit(player_laser[self.move],(self.x,self.y))
-            self.move += 1
-            if self.move == len (player_laser):
-                        self.move = 0
+            screen.blit(self.ship_imgs[int(self.index) % len(self.ship_imgs)],(self.x,self.y))
+            self.index += 0.03
+            if self.moves == len (self.ship_imgs):
+                        self.moves = 0
+            for laser in self.lasers:
+                laser.draw(screen)
 
             self.draw_healthbar(screen)
 
@@ -150,22 +159,23 @@ class Player(Ship):
 
 class Enemy(Ship):
     color_ships= {
-        "red":(red_enemy,red_enemy_laser),
-        "green":(green_enemy,green_enemy_laser),
-        "blue":(blue_enemy,blue_enemy_laser)
+        "red":(red_enemy_imgs,red_enemy_laser_imgs),
+        "green":(green_enemy_imgs,green_enemy_laser_imgs),
+        "purple":(purple_enemy_imgs,purple_enemy_laser_imgs),
+        "yellow":(yellow_enemy_imgs,yellow_enemy_laser_imgs)
     }
 
     def __init__(self,x,y,color,health = 100):
         super().__init__(x,y,health)
-        self.ship_img,self.laser_img = self.color_ships[color]
-        self.mask = pygame.mask.from_surface(self.ship_img)
+        self.ship_imgs,self.laser_img = self.color_ships[color]
+        self.mask = pygame.mask.from_surface(self.ship_imgs[0])
 
     def move(self, vel):
         self.y += vel
 
     def shoot(self): 
         if self.fbs_counter <= 0 :
-            laser = Laser(self.x -20 , self.y , self.laser_img)
+            laser = Laser((self.x + self.get_width()//2)-20  , self.y , self.laser_img )
             self.lasers.append(laser)
             self.fbs_counter = self.fbs_shots
         else:
@@ -178,7 +188,7 @@ def main():
     lives = 5 
 
     enemies = []
-    wave_lenght = 5
+    wave_lenght = 7
     enemy_vel = 1
     player_vel = 5
     laser_vel = 5 
@@ -224,16 +234,16 @@ def main():
             level += 1 
             wave_lenght += 5
             for i in range(wave_lenght):
-                enemy = Enemy(random.randrange(50 , WIDTH - 50), random.randrange(-1300 ,-100),random.choice(["red","blue","green"]))
+                enemy = Enemy(random.randrange(50 , WIDTH - 50), random.randrange(-1300 ,-100),random.choice(["red","purple","green","yellow"]))
                 enemies.append(enemy)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and player.x - player_vel > 0 :
             player.x -= player_vel
-        if keys[pygame.K_d] and player.x + player_vel + player_ship[0].get_width()< WIDTH:
+        if keys[pygame.K_d] and player.x + player_vel + player_ship_imgs[0].get_width()< WIDTH:
             player.x += player_vel
         if keys[pygame.K_w] and player.y - player_vel > 0 :
             player.y -= player_vel
-        if keys[pygame.K_s] and player.y + player_vel+ player_ship[0].get_height() + 20  < HIGHIT:
+        if keys[pygame.K_s] and player.y + player_vel+ player_ship_imgs[0].get_height() + 20  < HIGHIT:
             player.y += player_vel
         if keys[pygame.K_SPACE] :
             player.shoot()
