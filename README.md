@@ -116,6 +116,6 @@ https://youtu.be/iK5cxjIL1IM?si=rSHfRdRo51UhY2Uq
 
 
 # Images 
-!(assets/begingimg.png)[]
+![](begingimg.png)
 
-!(assets/gameplaying.png)[]
+![](assets/gameplaying.png)
