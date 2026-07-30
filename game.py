@@ -47,7 +47,7 @@ def draw_lost():
     lost_lables= lost_font.render("You Lost!!",1,(255,255,255))
     WIND.blit(lost_lables,(WIDTH//2 - lost_lables.get_width()//2-10,HIGHIT//2))
 
-bg = pygame.transform.scale(pygame.image.load(os.path.join("assets","background-black.png")),(WIDTH,HIGHIT))
+bg = pygame.transform.scale(pygame.image.load(pathing("assets/background-black.png")),(WIDTH,HIGHIT))
 
 
 red_enemy_imgs = [pygame.image.load(pathing("assets/redship1.png")),pygame.image.load(pathing("assets/redship2.png")),pygame.image.load(pathing("assets/redship3.png"))]
