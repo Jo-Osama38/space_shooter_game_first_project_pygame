@@ -118,4 +118,4 @@ https://youtu.be/iK5cxjIL1IM?si=rSHfRdRo51UhY2Uq
 # Images 
 ![](begingimg.png)
 
-![](assets/gameplaying.png)
+![](gameplaying.png)
