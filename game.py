@@ -14,6 +14,12 @@ main_font = pygame.font.SysFont("comicsans",35)
 lost_font = pygame.font.SysFont("comicsans",45)
 soundlaser = pygame.mixer.Sound("sounds/bullet.wav")
 soundlaser.set_volume(0.2)
+bomsound = pygame.mixer.Sound("sounds/bom.mp3")
+bomsound.set_volume(0.2)
+tryagainsound = pygame.mixer.Sound("sounds/tryagain.mp3")
+pygame.mixer.music.load("sounds/space.mp3")
+pygame.mixer.music.set_volume(0.2)
+
 
 def collide(obj1,obj2):
     offset_x = obj2.x - obj1.x
@@ -139,6 +145,7 @@ class Player(Ship):
                 for obj in objs:
                     if laser.collision(obj):
                         objs.remove(obj)
+                        bomsound.play()
                         if laser in self.lasers:
                             self.lasers.remove(laser)
     def draw(self, screen):
@@ -183,6 +190,8 @@ class Enemy(Ship):
 
 
 def main():
+    pygame.mixer.music.play()
+
     FBS = 60
     level = 0
     lives = 5 
@@ -219,6 +228,7 @@ def main():
     while run:
         clock.tick(FBS)
         redraw()
+        
 
         if lives <= 0 or player.health <= 0:
             lost = True
@@ -227,6 +237,7 @@ def main():
         if lost :
             if lost_counter > FBS*3:
                 run = False
+                tryagainsound.play()
             else:
                 continue
 
@@ -259,6 +270,7 @@ def main():
             if collide(enemy,player):
                 player.health -= 10
                 enemies.remove(enemy)
+                bomsound.play()
 
             elif enemy.y + enemy.get_height() > HIGHIT:
                 lives -= 1 
