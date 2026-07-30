@@ -25,7 +25,7 @@ soundlaser = pygame.mixer.Sound(pathing("sounds/bullet.wav"))
 soundlaser.set_volume(0.2)
 bomsound = pygame.mixer.Sound(pathing("sounds/bom.mp3"))
 bomsound.set_volume(0.2)
-tryagainsound = pygame.mixer.Sound("sounds/tryagain.mp3")
+tryagainsound = pygame.mixer.Sound(pathing("sounds/tryagain.mp3"))
 pygame.mixer.music.load(pathing("sounds/space.mp3"))
 pygame.mixer.music.set_volume(0.2)
 
