@@ -34,16 +34,18 @@ def draw_lost():
 
 bg = pygame.transform.scale(pygame.image.load(os.path.join("assets","background-black.png")),(WIDTH,HIGHIT))
 
-red_enemy = pygame.image.load(os.path.join("assets","pixel_ship_red_small.png"))
-green_enemy = pygame.image.load(os.path.join("assets","pixel_ship_green_small.png"))
-blue_enemy = pygame.image.load(os.path.join("assets","pixel_ship_blue_small.png"))
-red_enemy_laser = pygame.image.load(os.path.join("assets","pixel_laser_red.png"))
-green_enemy_laser = pygame.image.load(os.path.join("assets","pixel_laser_green.png"))
-blue_enemy_laser = pygame.image.load(os.path.join("assets","pixel_laser_blue.png"))
 
+red_enemy_imgs = [pygame.image.load("assets/redship1"),pygame.image.load("assets/redship2"),pygame.image.load("assets/redship3")]
+purple_enemy_imgs = [pygame.image.load("assets/purpleship1"),pygame.image.load("assets/purpleship2"),pygame.image.load("assets/purpleship3"),pygame.image.load("assets/purpleship4")]
+green_enemy_imgs = [pygame.image.load("assets/greenship1"),pygame.image.load("assets/greenship2")]
+yellow_enemy_imgs = [pygame.image.load("assets/yellowship1"),pygame.image.load("assets/yellowship2"),pygame.image.load("assets/yellowship3")]
+red_enemy_laser_imgs = [pygame.image.load("assets/redshoot1"),pygame.image.load("assets/redshoot2"),pygame.image.load("assets/redshoot3")]
+purple_enemy_laser_imgs = [pygame.image.load("assets/purpleshoot1"),pygame.image.load("assets/purpleshoot2"),pygame.image.load("assets/purpleshoot3")]
+green_enemy_laser_imgs = [pygame.image.load("assets/greenshoot1"),pygame.image.load("assets/greenshoot2"),pygame.image.load("assets/greenshoot3")]
+yellow_enemy_laser_imgs = [pygame.image.load("assets/yellowshoot1"),pygame.image.load("assets/yellowshoot2"),pygame.image.load("assets/yellowshoot3")]
 
-player_ship = [pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue3.png")]
-player_laser = [pygame.image.load("assets/blueshoot.png"),pygame.image.load("assets/blueshoot2.png"),pygame.image.load("assets/blueshoot3.png")]
+player_ship_imgs = [pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue3.png")]
+player_laser_imgs = [pygame.image.load("assets/playershoot1.png"),pygame.image.load("assets/playershoot2.png"),pygame.image.load("assets/playershoot3.png"),pygame.image.load("assets/playershoot4.png"),pygame.image.load("assets/playershoot5")]
 
 
 class Ship:
