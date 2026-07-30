@@ -1,9 +1,18 @@
 import pygame
 import os
 import random
-import time
+import sys
+
 pygame.init()
 pygame.font.init()
+
+def pathing(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path,relative_path)
+
 
 
 WIDTH = 600
@@ -12,12 +21,12 @@ WIND = pygame.display.set_mode((WIDTH,HIGHIT))
 pygame.display.set_caption("Space Shooter Game")
 main_font = pygame.font.SysFont("comicsans",35)
 lost_font = pygame.font.SysFont("comicsans",45)
-soundlaser = pygame.mixer.Sound("sounds/bullet.wav")
+soundlaser = pygame.mixer.Sound(pathing("sounds/bullet.wav"))
 soundlaser.set_volume(0.2)
-bomsound = pygame.mixer.Sound("sounds/bom.mp3")
+bomsound = pygame.mixer.Sound(pathing("sounds/bom.mp3"))
 bomsound.set_volume(0.2)
 tryagainsound = pygame.mixer.Sound("sounds/tryagain.mp3")
-pygame.mixer.music.load("sounds/space.mp3")
+pygame.mixer.music.load(pathing("sounds/space.mp3"))
 pygame.mixer.music.set_volume(0.2)
 
 
@@ -41,17 +50,17 @@ def draw_lost():
 bg = pygame.transform.scale(pygame.image.load(os.path.join("assets","background-black.png")),(WIDTH,HIGHIT))
 
 
-red_enemy_imgs = [pygame.image.load("assets/redship1.png"),pygame.image.load("assets/redship2.png"),pygame.image.load("assets/redship3.png")]
-purple_enemy_imgs = [pygame.image.load("assets/purpleship1.png"),pygame.image.load("assets/purpleship2.png"),pygame.image.load("assets/purpleship3.png"),pygame.image.load("assets/purpleship4.png")]
-green_enemy_imgs = [pygame.image.load("assets/greenship1.png"),pygame.image.load("assets/greenship2.png")]
-yellow_enemy_imgs = [pygame.image.load("assets/yellowship1.png"),pygame.image.load("assets/yellowship2.png"),pygame.image.load("assets/yellowship3.png")]
-red_enemy_laser_imgs = [pygame.image.load("assets/redshoot1.png"),pygame.image.load("assets/redshoot2.png"),pygame.image.load("assets/redshoot3.png")]
-purple_enemy_laser_imgs = [pygame.image.load("assets/purpleshoot1.png"),pygame.image.load("assets/purpleshoot2.png"),pygame.image.load("assets/purpleshoot3.png")]
-green_enemy_laser_imgs = [pygame.image.load("assets/greenshoot1.png"),pygame.image.load("assets/greenshoot2.png"),pygame.image.load("assets/greenshoot3.png")]
-yellow_enemy_laser_imgs = [pygame.image.load("assets/yellowshoot1.png"),pygame.image.load("assets/yellowshoot2.png"),pygame.image.load("assets/yellowshoot3.png")]
+red_enemy_imgs = [pygame.image.load(pathing("assets/redship1.png")),pygame.image.load(pathing("assets/redship2.png")),pygame.image.load(pathing("assets/redship3.png"))]
+purple_enemy_imgs = [pygame.image.load(pathing("assets/purpleship1.png")),pygame.image.load(pathing("assets/purpleship2.png")),pygame.image.load(pathing("assets/purpleship3.png")),pygame.image.load(pathing("assets/purpleship4.png"))]
+green_enemy_imgs = [pygame.image.load(pathing("assets/greenship1.png")),pygame.image.load(pathing("assets/greenship2.png"))]
+yellow_enemy_imgs = [pygame.image.load(pathing("assets/yellowship1.png")),pygame.image.load(pathing("assets/yellowship2.png")),pygame.image.load(pathing("assets/yellowship3.png"))]
+red_enemy_laser_imgs = [pygame.image.load(pathing("assets/redshoot1.png")),pygame.image.load(pathing("assets/redshoot2.png")),pygame.image.load(pathing("assets/redshoot3.png"))]
+purple_enemy_laser_imgs = [pygame.image.load(pathing("assets/purpleshoot1.png")),pygame.image.load(pathing("assets/purpleshoot2.png")),pygame.image.load(pathing("assets/purpleshoot3.png"))]
+green_enemy_laser_imgs = [pygame.image.load(pathing("assets/greenshoot1.png")),pygame.image.load(pathing("assets/greenshoot2.png")),pygame.image.load(pathing("assets/greenshoot3.png"))]
+yellow_enemy_laser_imgs = [pygame.image.load(pathing("assets/yellowshoot1.png")),pygame.image.load(pathing("assets/yellowshoot2.png")),pygame.image.load(pathing("assets/yellowshoot3.png"))]
 
-player_ship_imgs = [pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue2.png"),pygame.image.load("assets/PlayerShipBlue3.png")]
-player_laser_imgs = [pygame.image.load("assets/playershoot1.png"),pygame.image.load("assets/playershoot2.png"),pygame.image.load("assets/playershoot3.png"),pygame.image.load("assets/playershoot4.png"),pygame.image.load("assets/playershoot5.png")]
+player_ship_imgs = [pygame.image.load(pathing("assets/PlayerShipBlue2.png")),pygame.image.load(pathing("assets/PlayerShipBlue2.png")),pygame.image.load(pathing("assets/PlayerShipBlue3.png"))]
+player_laser_imgs = [pygame.image.load(pathing("assets/playershoot1.png")),pygame.image.load(pathing("assets/playershoot2.png")),pygame.image.load(pathing("assets/playershoot3.png")),pygame.image.load(pathing("assets/playershoot4.png")),pygame.image.load(pathing("assets/playershoot5.png"))]
 
 
 class Ship:
