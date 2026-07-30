@@ -24,10 +24,10 @@
 - زر الضرب (SPACE)
 
 ## كيفيه التشغيل للماك
- في Releases نزل الملف .app
+في Releases نزل الملف game_for_mac.zip
 
 ## كيفيه التشغيل للوندوز
- في Releases نزل الملف .exe
+في Releases نزل الملف game_for_windows.zip
 
 ## التشغيل محليا
 - تأكد اولا من أن python  مثبته علي جهازك
@@ -77,10 +77,10 @@ So I changed the images that were originally used, added animations for the spac
 - Shoot: **SPACE**
 
 ## How to Run on macOS
-Download the **.app** file from the **Releases** section.
+Download the **game_for_mac.zip** file from the **Releases** section.
 
 ## How to Run on Windows
-Download the **.exe** file from the **Releases** section.
+Download the **game_for_windows.zip** file from the **Releases** section.
 
 ## Run Locally
 - First, make sure **Python** is installed on your computer.
